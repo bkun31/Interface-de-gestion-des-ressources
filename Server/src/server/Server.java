@@ -1,74 +1,40 @@
 package server;
 
-import java.util.Map;
-import database.Database;
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Queue;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import event.Evenement;
+import handler.ClientHandler;
+import handler.NotificationHandler;
+import view.AdminSide;
 
 public class Server {
-    private Map usersOnline;
-    private Database database;
+	public static Map<Long, PrintWriter> usersOnline = new ConcurrentHashMap<>();
+	public static BlockingQueue<Evenement> queue = new LinkedBlockingQueue<>();
+	public static Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss").create();
+	private static volatile boolean stop = false;
+	
 
-    public void start() {
-    }
-
-    private class HandleInput {
-        private BufferedReader in;
-        private PrintWriter out;
-        private Socket client;
-        private Database database;
-        private Queue eventQueue;
-
-        public HandleInput(Socket socket, Database database, Queue eventQueue) {
-        }
-
-        public void run() {
-        }
-
-        private String manageRequest(String request) {
-        }
-
-        private String requestLogin(Gson gson) {
-        }
-
-        private String requestSendMessage(Gson gson) {
-        }
-
-        private String requestCreateNewThread(Gson gson) {
-        }
-
-        private String requestGetThread(Gson gson) {
-        }
-
-        private String requestGetGroups(Gson gson) {
-        }
-
-        private String requestGetMessages(Gson gson) {
-        }
-
-        private String requestRefresh(Gson gson) {
-        }
-    }
-
-    private class HandleOutput {
-        private Socket usersOnline;
-        private Database database;
-        private Queue eventQueue;
-
-        public HandleOutput(Map usersOnline, Database database, Queue eventQueue) {
-        }
-
-        public void run() {
-        }
-
-        private String notifyNewMessages() {
-        }
-
-        private String notifyUpdateStatusMessages() {
-        }
-    }
+	public static void start() {
+		try (ServerSocket server = new ServerSocket(3131)) {
+			new Thread(new NotificationHandler()).start();
+			new AdminSide();
+			while (!stop) {
+				Socket client = server.accept();
+				new Thread(new ClientHandler(client)).start();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 }

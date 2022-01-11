@@ -1,7 +1,8 @@
-package data;
+package streamdata;
 
 
 public enum Status {
+    NOT_RECEIVED,
     PENDING,
     RECEIVED,
     READ;

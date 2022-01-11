@@ -1,34 +1,74 @@
 package data;
 
-import java.util.List;
-import java.util.Map;
-
 public class User {
-    private String userId;
-    private String name;
-    private String firstname;
-    private boolean service;
-    private DiscussionThread thread;
+	private long userId;
+	private String name;
+	private String firstname;
 
-    public User(String userId, String name, String firstname, List<Group> groups) {
-    }
+	/**
+	 * @return the userId
+	 */
+	public long getUserId() {
+		return userId;
+	}
 
-    public String getUserId() {
-    }
+	/**
+	 * @param userId the userId to set
+	 */
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
 
-    public String getName() {
-    }
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
 
-    public String getFirstName() {
-    }
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Map getGroups() {
-    }
+	/**
+	 * @return the firstname
+	 */
+	public String getFirstname() {
+		return firstname;
+	}
 
-    public boolean getService() {
-    }
+	/**
+	 * @param firstname the firstname to set
+	 */
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
 
-    public boolean equals(Object object) {
-    }
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (userId ^ (userId >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+
+		if (!(obj instanceof User))
+			return false;
+		User other = (User) obj;
+		if (userId != other.userId)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", name=" + name + ", firstname=" + firstname + "]";
+	}
 
 }
